@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>נפתלי מיגון — מערכות מתח נמוך | מצלמות, אזעקות, אינטרקום</title>
+  <meta name="description" content="נפתלי מיגון — התקנת מערכות מתח נמוך: מצלמות אבטחה, מערכות אזעקה, אינטרקום, מערכות סאונד ובקרות. שירות מקצועי ואמין." />
+
+  <!-- ===== גופנים ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Assistant:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0C1622;
+      --bg-2:#0F1D2E;
+      --panel:#13253C;
+      --panel-2:#16294280;
+      --line:rgba(255,255,255,.09);
+      --text:#EAF1F8;
+      --muted:#93A7BD;
+      --accent:#34D1C3;
+      --accent-dim:rgba(52,209,195,.14);
+      --accent-line:rgba(52,209,195,.35);
+      --radius:16px;
+      --maxw:1120px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:
+        radial-gradient(1200px 600px at 85% -10%, rgba(52,209,195,.10), transparent 60%),
+        radial-gradient(900px 500px at 0% 100%, rgba(52,209,195,.06), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family:"Assistant",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:22px}
+
+    .mono{font-family:"Space Mono",ui-monospace,monospace;letter-spacing:.04em}
+
+    /* ===== כפתורים ===== */
+    .btn{
+      display:inline-flex;align-items:center;gap:9px;
+      padding:13px 22px;border-radius:999px;font-weight:700;font-size:1.02rem;
+      transition:transform .15s ease, box-shadow .2s ease, background .2s ease;
+      border:1px solid transparent;cursor:pointer;
+    }
+    .btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+    .btn-primary{background:var(--accent);color:#06121A;box-shadow:0 10px 30px -10px var(--accent)}
+    .btn-primary:hover{transform:translateY(-2px)}
+    .btn-ghost{border-color:var(--line);background:rgba(255,255,255,.02);color:var(--text)}
+    .btn-ghost:hover{border-color:var(--accent-line);transform:translateY(-2px)}
+    .btn svg{width:19px;height:19px}
+
+    /* ===== סרגל עליון ===== */
+    header.nav{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(10px);
+      background:rgba(12,22,34,.7);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px}
+    .brand{display:flex;align-items:center;gap:11px;font-family:"Secular One",sans-serif;font-size:1.25rem}
+    .brand .mark{
+      width:34px;height:34px;border-radius:9px;flex:none;
+      display:grid;place-items:center;
+      background:var(--accent-dim);border:1px solid var(--accent-line);
+    }
+    .brand .mark svg{width:20px;height:20px;color:var(--accent)}
+    .nav-links{display:flex;gap:26px;font-size:.98rem;color:var(--muted)}
+    .nav-links a:hover{color:var(--text)}
+    .nav .btn{padding:9px 18px;font-size:.95rem}
+    @media(max-width:760px){.nav-links{display:none}.nav .cta-nav{display:none}}
+
+    /* ===== HERO ===== */
+    .hero{position:relative;padding:74px 0 84px}
+    .viewfinder{
+      position:relative;
+      border-radius:22px;
+      padding:clamp(30px,6vw,68px) clamp(22px,5vw,60px);
+      background:
+        linear-gradient(160deg, rgba(19,37,60,.75), rgba(12,22,34,.35));
+      border:1px solid var(--line);
+      overflow:hidden;
+    }
+    /* סמני עינית — פינות פוקוס */
+    .corner{position:absolute;width:34px;height:34px;border:2.5px solid var(--accent);opacity:.85}
+    .corner.tl{top:16px;inset-inline-start:16px;border-inline-end:0;border-bottom:0;border-radius:8px 0 0 0}
+    .corner.tr{top:16px;inset-inline-end:16px;border-inline-start:0;border-bottom:0;border-radius:0 8px 0 0}
+    .corner.bl{bottom:16px;inset-inline-start:16px;border-inline-end:0;border-top:0;border-radius:0 0 0 8px}
+    .corner.br{bottom:16px;inset-inline-end:16px;border-inline-start:0;border-top:0;border-radius:0 0 8px 0}
+    /* קו סריקה */
+    .scanline{
+      position:absolute;inset-inline:0;top:0;height:2px;
+      background:linear-gradient(90deg,transparent,var(--accent),transparent);
+      opacity:.5;animation:scan 5.5s linear infinite;pointer-events:none;
+    }
+    @keyframes scan{0%{transform:translateY(0)}100%{transform:translateY(46vh)}}
+
+    .status{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:.82rem;color:var(--accent);
+      border:1px solid var(--accent-line);background:var(--accent-dim);
+      padding:6px 13px;border-radius:999px;
+    }
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 var(--accent);animation:pulse 2s infinite}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,209,195,.6)}70%{box-shadow:0 0 0 8px rgba(52,209,195,0)}100%{box-shadow:0 0 0 0 rgba(52,209,195,0)}}
+
+    .hero h1{
+      font-family:"Secular One",sans-serif;
+      font-size:clamp(2.7rem,8vw,5.1rem);
+      line-height:1.02;margin:20px 0 14px;letter-spacing:-.01em;
+    }
+    .hero h1 .accent{color:var(--accent)}
+    .hero .lead{font-size:clamp(1.05rem,2.5vw,1.32rem);color:var(--muted);max-width:640px}
+    .hero .chips{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 30px}
+    .chip{font-size:.9rem;color:var(--text);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:7px 14px;border-radius:999px}
+    .hero .cta-row{display:flex;flex-wrap:wrap;gap:13px}
+
+    /* ===== כותרות אזורים ===== */
+    .sec{padding:70px 0}
+    .eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--accent);font-size:.85rem;margin-bottom:12px}
+    .eyebrow::before{content:"";width:26px;height:1px;background:var(--accent-line)}
+    .sec h2{font-family:"Secular One",sans-serif;font-size:clamp(1.9rem,4.5vw,2.7rem);line-height:1.1;margin-bottom:14px}
+    .sec .sub{color:var(--muted);max-width:620px;font-size:1.06rem}
+
+    /* ===== שירותים ===== */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+    @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:560px){.grid{grid-template-columns:1fr}}
+    .card{
+      position:relative;background:var(--panel-2);border:1px solid var(--line);
+      border-radius:var(--radius);padding:26px 24px;
+      transition:transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .card:hover{transform:translateY(-4px);border-color:var(--accent-line);background:rgba(19,37,60,.6)}
+    .card-media{
+      position:relative;height:176px;border-radius:12px;overflow:hidden;
+      margin-bottom:16px;border:1px solid var(--line);
+      background:linear-gradient(135deg,#12243a,#0d1826);
+      display:grid;place-items:center;
+    }
+    .card-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;transition:transform .35s ease}
+    .card:hover .card-media img{transform:scale(1.05)}
+    .card-media .ph{width:42px;height:42px;color:var(--accent);opacity:.32}
+    .card-media .ch{
+      position:absolute;top:9px;inset-inline-start:9px;z-index:2;
+      font-size:.66rem;color:var(--accent);background:rgba(6,18,26,.72);
+      border:1px solid var(--accent-line);padding:3px 8px;border-radius:6px;
+    }
+    .card h3{font-family:"Secular One",sans-serif;font-size:1.32rem;margin-bottom:8px}
+    .card p{color:var(--muted);font-size:1rem}
+
+    /* ===== למה אנחנו ===== */
+    .why{background:linear-gradient(180deg,transparent,rgba(15,29,46,.5));border-block:1px solid var(--line)}
+    .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:38px}
+    @media(max-width:820px){.why-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:460px){.why-grid{grid-template-columns:1fr}}
+    .why-item{padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel-2)}
+    .why-item .k{font-family:"Secular One",sans-serif;color:var(--accent);font-size:1.7rem;margin-bottom:6px}
+    .why-item .t{font-weight:700;margin-bottom:4px}
+    .why-item .d{color:var(--muted);font-size:.96rem}
+
+    /* ===== צור קשר ===== */
+    .contact-card{
+      position:relative;overflow:hidden;
+      background:linear-gradient(150deg,rgba(19,37,60,.9),rgba(12,22,34,.6));
+      border:1px solid var(--accent-line);border-radius:24px;
+      padding:clamp(30px,5vw,54px);text-align:center;
+    }
+    .contact-card h2{font-family:"Secular One",sans-serif;font-size:clamp(1.9rem,5vw,3rem);margin-bottom:12px}
+    .contact-card p{color:var(--muted);font-size:1.1rem;max-width:520px;margin:0 auto 26px}
+    .contact-row{display:flex;flex-wrap:wrap;gap:13px;justify-content:center}
+    .cwatermark{position:absolute;inset-inline-end:-30px;bottom:-40px;opacity:.05;pointer-events:none}
+    .cwatermark svg{width:220px;height:220px;color:var(--accent)}
+
+    /* ===== פוטר ===== */
+    footer.ft{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:.92rem}
+    .ft-inner{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+    .ft .brand{font-size:1.1rem;color:var(--text)}
+
+    @media(prefers-reduced-motion:reduce){
+      .scanline,.dot{animation:none}
+      .btn,.card{transition:none}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ סרגל עליון ============ -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a href="#top" class="brand">
+        <span class="mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5l-8-3Z"/></svg>
+        </span>
+        נפתלי מיגון
+      </a>
+      <nav class="nav-links">
+        <a href="#services">שירותים</a>
+        <a href="#why">למה אנחנו</a>
+        <a href="#contact">צור קשר</a>
+      </nav>
+      <!-- החליפו את המספר בטלפון שלכם (בלי מקף, עם קידומת בינ״ל 972) -->
+      <a class="btn btn-primary cta-nav" href="tel:+9720500000000">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2Z"/></svg>
+        חייגו עכשיו
+      </a>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="top" class="hero">
+    <div class="wrap">
+      <div class="viewfinder">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <span class="scanline"></span>
+
+        <span class="status"><span class="dot"></span> מערכות מתח נמוך · זמינים לשירות</span>
+
+        <h1>שומרים על מה<br>ש<span class="accent">חשוב</span> לכם.</h1>
+        <p class="lead">
+          נפתלי מיגון — התקנה, אחזקה ושירות של מערכות אבטחה ותקשורת לבית ולעסק.
+          עבודה מקצועית, נקייה ואמינה, עם ליווי אישי מהתכנון ועד ההפעלה.
+        </p>
+
+        <div class="chips">
+          <span class="chip">מצלמות</span>
+          <span class="chip">אזעקות</span>
+          <span class="chip">אינטרקום</span>
+          <span class="chip">סאונד</span>
+          <span class="chip">בקרות</span>
+        </div>
+
+        <div class="cta-row">
+          <!-- החליפו את המספר בוואטסאפ שלכם -->
+          <a class="btn btn-primary" href="https://wa.me/9720500000000" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.9 5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.4 2.6 1.6.3.1.5.1.7-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.7-.1 1.3Z"/></svg>
+            וואטסאפ
+          </a>
+          <a class="btn btn-ghost" href="#services">
+            לשירותים שלנו
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m7 7-7-7 7-7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ שירותים ============ -->
+  <section id="services" class="sec">
+    <div class="wrap">
+      <span class="eyebrow mono">השירותים שלנו</span>
+      <h2>פתרון שלם למתח נמוך</h2>
+      <p class="sub">מתכננים, מתקינים ומתחזקים כל מערכת בהתאמה מדויקת לבית או לעסק שלכם.</p>
+
+      <div class="grid">
+        <article class="card">
+          <div class="card-media">
+            <span class="ch mono">CH·01</span>
+            <!-- העלה תמונה בשם images/cameras.jpg -->
+            <img src="images/cameras.jpg" alt="מצלמות אבטחה" loading="lazy" onerror="this.remove()">
+            <svg class="ph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h13l4 3v7a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7Z"/><circle cx="8.5" cy="12.5" r="2.5"/><path d="M19 10l3-1.5v7L19 14"/></svg>
+          </div>
+          <h3>מצלמות אבטחה</h3>
+          <p>התקנת מצלמות ברזולוציה גבוהה, צפייה מרחוק מהנייד, הקלטה ואחסון, וכיסוי מלא של שטח הבית או העסק.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-media">
+            <span class="ch mono">CH·02</span>
+            <!-- העלה תמונה בשם images/alarm.jpg -->
+            <img src="images/alarm.jpg" alt="מערכות אזעקה" loading="lazy" onerror="this.remove()">
+            <svg class="ph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          </div>
+          <h3>מערכות אזעקה</h3>
+          <p>גילוי פריצה, גלאי תנועה ומגנטים, אזעקה מקומית וחיבור למוקד — התראה מיידית לכל אירוע חריג.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-media">
+            <span class="ch mono">CH·03</span>
+            <!-- העלה תמונה בשם images/intercom.jpg -->
+            <img src="images/intercom.jpg" alt="אינטרקום" loading="lazy" onerror="this.remove()">
+            <svg class="ph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><circle cx="12" cy="8" r="2.5"/><path d="M8 16h8M9 19h6"/></svg>
+          </div>
+          <h3>אינטרקום</h3>
+          <p>אינטרקום קולי ווידאו, זיהוי מבקרים בכניסה, ופתיחת שער או דלת מרחוק — נוחות ושליטה בכניסה לבית.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-media">
+            <span class="ch mono">CH·04</span>
+            <!-- אופציונלי: images/sound.jpg -->
+            <img src="images/sound.jpg" alt="מערכות סאונד" loading="lazy" onerror="this.remove()">
+            <svg class="ph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>
+          </div>
+          <h3>מערכות סאונד</h3>
+          <p>הגברה ורמקולים לחללי בית, עסק ואולם — התקנה מקצועית עם צליל נקי ושליטה נוחה בכל אזור.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-media">
+            <span class="ch mono">CH·05</span>
+            <!-- אופציונלי: images/controls.jpg -->
+            <img src="images/controls.jpg" alt="בקרות" loading="lazy" onerror="this.remove()">
+            <svg class="ph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="8" cy="18" r="2"/></svg>
+          </div>
+          <h3>בקרות</h3>
+          <p>בקרת כניסה ושערים, שליטה בתאורה ואוטומציה — מערכות חכמות שמנוהלות בקלות ובבטחה.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-media">
+            <span class="ch mono">CH·06</span>
+            <!-- אופציונלי: images/service.jpg -->
+            <img src="images/service.jpg" alt="שירות ואחזקה" loading="lazy" onerror="this.remove()">
+            <svg class="ph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4l-5.6 5.6a2 2 0 1 0 2.8 2.8l5.6-5.6a5 5 0 0 0 6.4-6.4l-2.9 2.9-2.1-2.1 2.2-2.6Z"/></svg>
+          </div>
+          <h3>שירות ואחזקה</h3>
+          <p>תיקון תקלות, שדרוג מערכות קיימות וטיפול תקופתי — כדי שהכל ימשיך לעבוד בלי הפתעות.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ למה אנחנו ============ -->
+  <section id="why" class="sec why">
+    <div class="wrap">
+      <span class="eyebrow mono">למה נפתלי מיגון</span>
+      <h2>מקצועיות שאפשר לסמוך עליה</h2>
+      <p class="sub">אנחנו לא רק מתקינים מערכת — אנחנו דואגים לשקט הנפשי שלכם לאורך זמן.</p>
+
+      <div class="why-grid">
+        <div class="why-item"><div class="k mono">A–Z</div><div class="t">ליווי אישי</div><div class="d">מהתכנון והייעוץ ועד ההתקנה וההדרכה — אתם עם איש קשר אחד לאורך כל הדרך.</div></div>
+        <div class="why-item"><div class="k mono">100%</div><div class="t">עבודה נקייה</div><div class="d">התקנה מסודרת ואסתטית, עם הקפדה על כל פרט בבית או בעסק שלכם.</div></div>
+        <div class="why-item"><div class="k mono">24/7</div><div class="t">זמינות לשירות</div><div class="d">מגיבים מהר לתקלות ולפניות, כי אבטחה לא יכולה לחכות.</div></div>
+        <div class="why-item"><div class="k mono">★</div><div class="t">איכות וחומרים</div><div class="d">רכיבים אמינים ומערכות מוכחות שנבנו כדי להחזיק לאורך שנים.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ צור קשר ============ -->
+  <section id="contact" class="sec">
+    <div class="wrap">
+      <div class="contact-card">
+        <div class="cwatermark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5l-8-3Z"/></svg>
+        </div>
+        <span class="eyebrow mono" style="justify-content:center">דברו איתנו</span>
+        <h2>מוכנים לאבטח את הבית או העסק?</h2>
+        <p>ספרו לנו מה אתם צריכים, ונחזור אליכם עם ייעוץ והצעה מותאמת — ללא התחייבות.</p>
+        <div class="contact-row">
+          <!-- ↓↓↓ החליפו את פרטי הקשר כאן ↓↓↓ -->
+          <a class="btn btn-primary" href="tel:+9720500000000">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2Z"/></svg>
+            050-0000000
+          </a>
+          <a class="btn btn-ghost" href="https://wa.me/9720500000000" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.9 5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.4 2.6 1.6.3.1.5.1.7-.1l.7-.8c.2-.2.4-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.7-.1 1.3Z"/></svg>
+            שליחת הודעה
+          </a>
+          <a class="btn btn-ghost" href="mailto:info@naftali.kempe.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            אימייל
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ פוטר ============ -->
+  <footer class="ft">
+    <div class="wrap ft-inner">
+      <div class="brand" style="font-family:'Secular One',sans-serif">נפתלי מיגון</div>
+      <div>מערכות מתח נמוך · מצלמות · אזעקות · אינטרקום · סאונד · בקרות</div>
+      <div class="mono">© <span id="yr"></span> naftali.kempe.com</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
